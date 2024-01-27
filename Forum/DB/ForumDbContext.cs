@@ -14,6 +14,7 @@ namespace Forum.DB
         {
             mb.Entity<User>().Property(u => u.Id).IsRequired();
             mb.Entity<User>().Property(u => u.Email).IsRequired();
+            mb.Entity<User>().Property(u => u.Password).IsRequired();
         }
 
 
