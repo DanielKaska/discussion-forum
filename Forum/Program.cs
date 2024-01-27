@@ -1,8 +1,14 @@
+using Forum.Models;
+using Forum.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+builder.Services.AddAutoMapper(typeof(MapperConfig));
+builder.Services.AddSingleton<UserService>();
 
 var app = builder.Build();
 
