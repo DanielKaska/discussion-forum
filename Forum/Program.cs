@@ -1,3 +1,4 @@
+using Forum.DB;
 using Forum.Models;
 using Forum.Services;
 
@@ -9,6 +10,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 builder.Services.AddSingleton<UserService>();
+builder.Services.AddSingleton<ForumDbContext>();
 
 var app = builder.Build();
 
