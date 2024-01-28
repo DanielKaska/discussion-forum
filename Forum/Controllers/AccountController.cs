@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Forum.DB;
+using Forum.DB.Entities;
 using Forum.Models;
 using Forum.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +11,9 @@ namespace Forum.Controllers
     public class AccountController : Controller
     {
         /*---------------dependencies----------------*/
-        private readonly UserService userService;
-        private readonly ForumDbContext db;
-        private readonly IMapper mapper;
+        private readonly UserService userService; 
+        private readonly ForumDbContext db; //Db Context
+        private readonly IMapper mapper; //AutoMapper
         /*-------------------------------------------*/
 
         public AccountController(UserService userService, ForumDbContext _db, IMapper _mapper)
@@ -22,17 +23,28 @@ namespace Forum.Controllers
             mapper = _mapper;
         }
 
-
+        [Route("create")]
         [HttpPost]
-        public ActionResult CreateAccount(UserModel user)
+        public ActionResult CreateAccount(UserModel userModel)
         {
-            if (user is null)
+            if (userModel is null)
                 return BadRequest("user is null");
 
+            var user = mapper.Map<User>(userModel);
 
-
-
-            return BadRequest();
+            db.Users.Add(user);
+            db.SaveChanges();
+            return Ok($"Account ID: {user.Id} created");
         }
+
+        [Route("getAllUsers")]
+        [HttpGet]
+        public ActionResult GetUsers()
+        {
+            var users = db.Users.ToList();
+
+            return Ok(users);
+        }
+
     }
 }
