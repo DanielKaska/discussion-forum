@@ -3,6 +3,7 @@ using Forum.DB;
 using Forum.DB.Entities;
 using Forum.Models;
 using Forum.Services;
+using Isopoh.Cryptography.Argon2;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Forum.Controllers
@@ -30,11 +31,22 @@ namespace Forum.Controllers
             if (userModel is null)
                 return BadRequest("user is null");
 
-            var user = mapper.Map<User>(userModel);
+            var user = userService.CreateUser(userModel);
 
-            db.Users.Add(user);
-            db.SaveChanges();
             return Ok($"Account ID: {user.Id} created");
+        }
+
+        [Route("login")]
+        [HttpPost]
+        public ActionResult Login(UserModel userModel)
+        {
+            if (userModel is null)
+                return BadRequest("user is null");
+
+            var token = userService.Login(userModel);
+
+            
+            return BadRequest(token);
         }
 
         [Route("getAllUsers")]
