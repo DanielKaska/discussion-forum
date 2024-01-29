@@ -14,7 +14,7 @@ namespace Forum.DB
         {
             mb.Entity<User>().Property(u => u.Id).IsRequired();
             mb.Entity<User>().Property(u => u.Email).IsRequired().HasMaxLength(40);
-            mb.Entity<User>().Property(u => u.Password).IsRequired().HasMaxLength(30);
+            mb.Entity<User>().Property(u => u.Password).IsRequired();
             mb.Entity<User>().Property(u => u.Name).IsRequired().HasMaxLength(20);
             mb.Entity<User>().Property(u => u.RoleId).HasDefaultValue(1);
                 
