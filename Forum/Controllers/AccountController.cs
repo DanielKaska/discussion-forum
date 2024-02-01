@@ -4,6 +4,7 @@ using Forum.DB.Entities;
 using Forum.Models;
 using Forum.Services;
 using Isopoh.Cryptography.Argon2;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Forum.Controllers
@@ -46,9 +47,10 @@ namespace Forum.Controllers
             var token = userService.Login(userModel);
 
             
-            return BadRequest(token);
+            return Ok(token);
         }
 
+        [Authorize]
         [Route("getAllUsers")]
         [HttpGet]
         public ActionResult GetUsers()
