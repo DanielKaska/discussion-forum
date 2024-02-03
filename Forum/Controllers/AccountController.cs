@@ -25,7 +25,7 @@ namespace Forum.Controllers
             mapper = _mapper;
         }
 
-        [Route("create")]
+        [Route("account/create")]
         [HttpPost]
         public ActionResult CreateAccount(UserModel userModel)
         {
@@ -37,7 +37,7 @@ namespace Forum.Controllers
             return Ok($"Account ID: {user.Id} created");
         }
 
-        [Route("login")]
+        [Route("account/login")]
         [HttpPost]
         public ActionResult Login(UserModel userModel)
         {
@@ -46,8 +46,10 @@ namespace Forum.Controllers
 
             var token = userService.Login(userModel);
 
-            
-            return Ok(token);
+            if (token is not null)
+                return Ok(token);
+
+            return BadRequest("wrong login or password");
         }
 
         [Authorize]
