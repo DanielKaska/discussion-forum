@@ -8,6 +8,7 @@ namespace Forum.Models
         public MapperConfig()
         {
             CreateMap<UserModel, User>();
+            CreateMap<PostModel, Post>();
         }
     }
 }

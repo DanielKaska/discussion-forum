@@ -1,12 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Forum.DB.Entities
+namespace Forum.Models
 {
-    public class Post
+    public class PostModel
     {
-        public int Id { get; set; }
-        public int CreatedBy { get; set; }
-
         [Required]
         [MaxLength(50)]
         [MinLength(3)]

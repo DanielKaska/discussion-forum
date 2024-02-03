@@ -9,6 +9,7 @@ namespace Forum.DB
 
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Post> Posts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder mb)
         {
@@ -22,7 +23,6 @@ namespace Forum.DB
             mb.Entity<Role>().HasData(new Role() { Id = 1, Name = "User", Description = "Normal user, can create posts and comment"});
             mb.Entity<Role>().HasData(new Role() { Id = 2, Name = "Moderator", Description = "Moderator, can mute or ban users, and delete their posts" });
             mb.Entity<Role>().HasData(new Role() { Id = 3, Name = "Admin", Description = "Admin, has right to do everything" });
-
         }
 
 

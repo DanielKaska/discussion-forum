@@ -44,9 +44,11 @@ builder.Services.AddAuthentication(
 builder.Services.AddControllers();
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
+builder.Services.AddSingleton<PostService>();
 builder.Services.AddSingleton<UserService>();
-builder.Services.AddSingleton<ForumDbContext>();
-builder.Services.AddSingleton(jwtOptions);
+builder.Services.AddSingleton<ForumDbContext>();//db context
+builder.Services.AddSingleton(jwtOptions); //add jwt options as dependency
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
