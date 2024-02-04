@@ -39,9 +39,14 @@ builder.Services.AddAuthentication(
 
 //----------------------------------------------------------------------------------------------------//
 
+
+
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+
+builder.Services.AddControllersWithViews().AddNewtonsoftJson(o => o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 builder.Services.AddSingleton<PostService>();
