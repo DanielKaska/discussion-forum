@@ -33,7 +33,7 @@ namespace Forum.Services
             var user = mapper.Map<User>(um);
             var hashedPassword = Argon2.Hash(user.Password);
             user.Password = hashedPassword;
-
+            user.CreatedDate = DateTime.Now;
             db.Users.Add(user);
             db.SaveChanges();
 
