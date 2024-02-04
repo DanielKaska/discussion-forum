@@ -6,6 +6,8 @@ using Forum.Services;
 using Isopoh.Cryptography.Argon2;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace Forum.Controllers
 {
@@ -50,6 +52,19 @@ namespace Forum.Controllers
                 return Ok(token);
 
             return BadRequest("wrong login or password");
+        }
+
+        [Route("user/{userId}")]
+        [HttpGet]
+        public ActionResult GetUser([FromRoute] int userId)
+        {
+            var user = db.Users.Include(u => u.Role).Include(u => u.Posts).FirstOrDefault(user => user.Id == userId);
+            
+            if (user is null)
+                return BadRequest();
+
+            return Ok(mapper.Map<GetUserModel>(user));
+
         }
 
         [Authorize]
