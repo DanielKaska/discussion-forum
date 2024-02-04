@@ -4,6 +4,7 @@ using Forum.DB.Entities;
 using Forum.Models;
 using AutoMapper;
 using AutoMapper.Configuration.Conventions;
+using System.Diagnostics;
 
 namespace Forum.Services
 {
@@ -26,8 +27,6 @@ namespace Forum.Services
 
             return post.Id;
         }
-
-
 
         public bool ModifyPost(int postId, PostModel pModel, int userId, int roleId)
         {
