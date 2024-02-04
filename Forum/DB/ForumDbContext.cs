@@ -13,12 +13,16 @@ namespace Forum.DB
 
         protected override void OnModelCreating(ModelBuilder mb)
         {
-            mb.Entity<User>().Property(u => u.Id).IsRequired();
-            mb.Entity<User>().Property(u => u.Email).IsRequired().HasMaxLength(40);
-            mb.Entity<User>().Property(u => u.Password).IsRequired();
-            mb.Entity<User>().Property(u => u.Name).IsRequired().HasMaxLength(20);
-            mb.Entity<User>().Property(u => u.RoleId).HasDefaultValue(1);
-                
+            mb.Entity<User>(user =>
+            {
+                user.Property(u => u.Id).IsRequired();
+                user.Property(u => u.Email).IsRequired().HasMaxLength(40);
+                user.Property(u => u.Password).IsRequired();
+                user.Property(u => u.Name).IsRequired().HasMaxLength(20);
+                user.Property(u => u.RoleId).HasDefaultValue(1);
+                user.HasMany(u => u.Posts).WithOne(post => post.Creator); //one to many relation with one user to many posts
+            });
+
 
             mb.Entity<Role>().HasData(new Role() { Id = 1, Name = "User", Description = "Normal user, can create posts and comment"});
             mb.Entity<Role>().HasData(new Role() { Id = 2, Name = "Moderator", Description = "Moderator, can mute or ban users, and delete their posts" });
