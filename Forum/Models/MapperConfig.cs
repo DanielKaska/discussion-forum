@@ -9,6 +9,11 @@ namespace Forum.Models
         {
             CreateMap<UserModel, User>();
             CreateMap<PostModel, Post>();
+
+            CreateMap<Post, PostModel>();
+            CreateMap<User, GetUserModel>();
+
+
         }
     }
 }
