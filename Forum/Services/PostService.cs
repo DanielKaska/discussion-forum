@@ -21,7 +21,8 @@ namespace Forum.Services
         public int CreatePost(PostModel pModel, int userId)
         {
             var post = mapper.Map<Post>(pModel);
-            post.CreatedBy = userId;
+            post.CreatorId = userId;
+            post.CreatedDate = DateTime.Now;
             db.Posts.Add(post);
             db.SaveChanges();
 
@@ -33,7 +34,7 @@ namespace Forum.Services
             var role = (RoleEnum)roleId; 
             var post = db.Posts.FirstOrDefault(p => p.Id == postId);
 
-            if(role == RoleEnum.Admin || post.CreatedBy == userId)
+            if(role == RoleEnum.Admin || post.Creator.Id == userId)
             {
                 post.Title = pModel.Title;
                 post.Content = pModel.Content;
