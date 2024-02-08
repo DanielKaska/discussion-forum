@@ -1,7 +1,9 @@
+using Forum;
 using Forum.DB;
 using Forum.Models;
 using Forum.Services;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,11 +42,18 @@ builder.Services.AddAuthentication(
 //----------------------------------------------------------------------------------------------------//
 
 
+//------------serilog config------------//
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("C:\\Users\\wojew\\source\\repos\\Forum\\Logs\\log.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+//--------------------------------------//
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-
 
 builder.Services.AddControllersWithViews().AddNewtonsoftJson(o => o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
@@ -52,7 +61,10 @@ builder.Services.AddAutoMapper(typeof(MapperConfig));
 builder.Services.AddSingleton<PostService>();
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<ForumDbContext>();//db context
+builder.Services.AddSingleton<ErrorMiddleware>();
 builder.Services.AddSingleton(jwtOptions); //add jwt options as dependency
+builder.Host.UseSerilog();
+
 
 var app = builder.Build();
 
@@ -61,6 +73,9 @@ var app = builder.Build();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+
+app.UseMiddleware<ErrorMiddleware>();
 
 app.MapControllers();
 
