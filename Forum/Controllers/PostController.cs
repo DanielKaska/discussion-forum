@@ -59,6 +59,13 @@ namespace Forum.Controllers
             
             return BadRequest("Unexpected error happened");
         }
+
+        [HttpGet("post/get/{query}")]
+        public ActionResult GetPostsByQuery([FromRoute]string query)
+        {
+            return Ok(postService.GetPost(query));
+        }
+
         //test comment
 
     }

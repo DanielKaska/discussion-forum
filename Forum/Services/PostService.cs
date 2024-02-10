@@ -45,6 +45,15 @@ namespace Forum.Services
             return false;
         }
 
+        public IEnumerable<PostModel> GetPost(string query)
+        {
+            var posts = db.Posts
+                .Where(q => q.Title.ToLower().Contains(query.ToLower())).ToList();
+                //.Where(q => q.Content.ToLower() == query.ToLower());
+
+            return mapper.Map<List<PostModel>>(posts);
+        }
+
 
     }
 }
