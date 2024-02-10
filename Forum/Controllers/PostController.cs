@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Forum.DB;
+using Forum.Exceptions;
 using Forum.Models;
 using Forum.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace Forum.Controllers
 {
@@ -26,7 +28,7 @@ namespace Forum.Controllers
         public ActionResult CreatePost([FromBody] PostModel pModel)
         {
             if (pModel is null)
-                return BadRequest("Post model cant be null");
+                throw new NullPostException("Post model cant be null");
 
             var userIdClaim = Request.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id");
 
@@ -36,7 +38,7 @@ namespace Forum.Controllers
                 return Ok(postId);
             }
 
-            return BadRequest();
+            return BadRequest("Unexpected error happened");
             
         }
 
@@ -47,15 +49,15 @@ namespace Forum.Controllers
             var userIdClaim = Request.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id");
             var userRoleClaim = Request.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "roleId");
 
-            if(userIdClaim is null || userRoleClaim is null)
-                BadRequest("Token error");
+            if (userIdClaim is null || userRoleClaim is null)
+                throw new Exception("Unexpected token error");
 
             var modified = postService.ModifyPost(postId, pModel, int.Parse(userIdClaim.Value), int.Parse(userRoleClaim.Value));
 
             if (modified)
                 return Ok();
             
-            return BadRequest();
+            return BadRequest("Unexpected error happened");
         }
         //test comment
 
