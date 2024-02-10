@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Forum.DB;
 using Forum.DB.Entities;
+using Forum.Exceptions;
 using Forum.Models;
 using Forum.Services;
 using Isopoh.Cryptography.Argon2;
@@ -32,7 +33,7 @@ namespace Forum.Controllers
         public ActionResult CreateAccount(UserModel userModel)
         {
             if (userModel is null)
-                return BadRequest("user is null");
+                throw new NullUserException("User dto can't be null");
 
             var user = userService.CreateUser(userModel);
 
@@ -44,14 +45,14 @@ namespace Forum.Controllers
         public ActionResult Login(UserModel userModel)
         {
             if (userModel is null)
-                return BadRequest("user is null");
+                throw new NullUserException("User dto can't be null");
 
             var token = userService.Login(userModel);
 
             if (token is not null)
                 return Ok(token);
 
-            return BadRequest("wrong login or password");
+            throw new Exception("Wrong email or password");
         }
 
         [Route("user/{userId}")]
@@ -59,9 +60,9 @@ namespace Forum.Controllers
         public ActionResult GetUser([FromRoute] int userId)
         {
             var user = db.Users.Include(u => u.Role).Include(u => u.Posts).FirstOrDefault(user => user.Id == userId);
-            
+
             if (user is null)
-                return BadRequest();
+                throw new NullUserException("User dto can't be null");
 
             return Ok(mapper.Map<GetUserModel>(user));
 
