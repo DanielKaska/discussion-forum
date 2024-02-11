@@ -19,5 +19,7 @@ namespace Forum.DB.Entities
         public User Creator { get; set; } //user that created the vote
         public int CreatorId { get; set; } //user id
 
+        public List<PostComment> Comments { get; set; } //List of comments
+
     }
 }
