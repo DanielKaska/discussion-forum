@@ -30,7 +30,7 @@ namespace Forum.Controllers
 
         [Route("account/create")]
         [HttpPost]
-        public ActionResult CreateAccount(UserModel userModel)
+        public ActionResult CreateAccount(CreateUserModel userModel)
         {
             if (userModel is null)
                 throw new NullUserException("User dto can't be null");
@@ -42,7 +42,7 @@ namespace Forum.Controllers
 
         [Route("account/login")]
         [HttpPost]
-        public ActionResult Login(UserModel userModel)
+        public ActionResult Login(CreateUserModel userModel)
         {
             if (userModel is null)
                 throw new NullUserException("User dto can't be null");
