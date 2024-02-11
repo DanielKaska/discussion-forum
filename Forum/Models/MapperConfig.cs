@@ -7,11 +7,14 @@ namespace Forum.Models
     {
         public MapperConfig()
         {
-            CreateMap<UserModel, User>();
-            CreateMap<PostModel, Post>();
+            CreateMap<UserModel, User>(); //convert model sent when creating an account
+            CreateMap<User, GetUserModel>();
+
+            CreateMap<PostModel, Post>(); //convert model sent when creating a post 
+            CreateMap<Post, GetPostModel>(); //convert from post to post model
 
             CreateMap<Post, PostModel>();
-            CreateMap<User, GetUserModel>();
+            
 
 
         }
