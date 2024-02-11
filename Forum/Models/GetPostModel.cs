@@ -1,4 +1,6 @@
-﻿namespace Forum.Models
+﻿using Forum.DB.Entities;
+
+namespace Forum.Models
 {
     public class GetPostModel
     {
@@ -6,5 +8,8 @@
         public string Title { get; set; }
         public string Content { get; set; }
         public DateTime? CreatedDate { get; set; }
+
+        public List<AddCommentModel> Comments { get; set; }
+
     }
 }
