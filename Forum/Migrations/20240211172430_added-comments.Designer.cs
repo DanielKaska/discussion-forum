@@ -4,6 +4,7 @@ using Forum.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Forum.Migrations
 {
     [DbContext(typeof(ForumDbContext))]
-    partial class ForumDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240211172430_added-comments")]
+    partial class addedcomments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,7 +41,7 @@ namespace Forum.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CreatorId")
+                    b.Property<int>("PostCreatorId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -48,7 +51,7 @@ namespace Forum.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatorId");
+                    b.HasIndex("PostCreatorId");
 
                     b.ToTable("Posts");
                 });
@@ -159,13 +162,13 @@ namespace Forum.Migrations
 
             modelBuilder.Entity("Forum.DB.Entities.Post", b =>
                 {
-                    b.HasOne("Forum.DB.Entities.User", "Creator")
+                    b.HasOne("Forum.DB.Entities.User", "PostCreator")
                         .WithMany("Posts")
-                        .HasForeignKey("CreatorId")
+                        .HasForeignKey("PostCreatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Creator");
+                    b.Navigation("PostCreator");
                 });
 
             modelBuilder.Entity("Forum.DB.Entities.PostComment", b =>
