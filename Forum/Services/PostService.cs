@@ -5,6 +5,9 @@ using Forum.Models;
 using AutoMapper;
 using AutoMapper.Configuration.Conventions;
 using System.Diagnostics;
+using Forum.Exceptions;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 namespace Forum.Services
 {
@@ -34,7 +37,7 @@ namespace Forum.Services
             var role = (RoleEnum)roleId; 
             var post = db.Posts.FirstOrDefault(p => p.Id == postId);
 
-            if(role == RoleEnum.Admin || post.Creator.Id == userId)
+            if(role == RoleEnum.Admin || post.Creator.Id== userId)
             {
                 post.Title = pModel.Title;
                 post.Content = pModel.Content;
@@ -45,13 +48,30 @@ namespace Forum.Services
             return false;
         }
 
-        public IEnumerable<PostModel> GetPost(string query)
+        public IEnumerable<GetPostModel> GetPost(string query)
         {
-            var posts = db.Posts
-                .Where(q => q.Title.ToLower().Contains(query.ToLower())).ToList();
-                //.Where(q => q.Content.ToLower() == query.ToLower());
+            var lowerQuery = query.ToLower();
 
-            return mapper.Map<List<PostModel>>(posts);
+            var posts = db.Posts
+                .Include(p => p.Comments)
+                .Where(q => q.Title.ToLower().Contains(lowerQuery) || q.Content.ToLower().Contains(lowerQuery))
+                .ToList();
+
+            return mapper.Map<List<GetPostModel>>(posts);
+        }
+
+        public bool AddComment(AddCommentModel commentModel, int userId)
+        {
+            if (commentModel is null)
+                throw new NullCommentException("Comment model can't be null");
+
+            var comment = mapper.Map<PostComment>(commentModel);
+            comment.CommentCreatedDate = DateTime.Now;
+
+            db.Comments.Add(comment);
+            db.SaveChanges();
+
+            return true;
         }
 
 
