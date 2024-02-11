@@ -60,13 +60,24 @@ namespace Forum.Controllers
             return BadRequest("Unexpected error happened");
         }
 
-        [HttpGet("post/get/{query}")]
-        public ActionResult GetPostsByQuery([FromRoute]string query)
+        [HttpGet("post/get/")]
+        public ActionResult GetPostsByQuery([FromQuery] string query)
         {
             return Ok(postService.GetPost(query));
         }
 
-        //test comment
+        [Authorize]
+        [HttpPost("post/addComment")]
+        public ActionResult AddComment([FromBody] AddCommentModel commentModel)
+        {
+            var userId = int.Parse(Request.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id").Value);
+
+            var created = postService.AddComment(commentModel, userId);
+
+            if(created) return Ok();
+
+            throw new Exception("Unexpected error happened");
+        }
 
     }
 }
