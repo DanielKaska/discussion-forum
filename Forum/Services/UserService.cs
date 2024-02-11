@@ -28,7 +28,7 @@ namespace Forum.Services
             jwtSettings = _JwtSettings;
         }
 
-        public User CreateUser(UserModel um)
+        public User CreateUser(CreateUserModel um)
         {
             var user = mapper.Map<User>(um);
             var hashedPassword = Argon2.Hash(user.Password);
@@ -42,7 +42,7 @@ namespace Forum.Services
 
         //todo
         //login method checks if the user sent correct email and password, then sends back jwt token
-        public string Login(UserModel um)
+        public string Login(CreateUserModel um)
         {
             var user = db.Users.FirstOrDefault(u => u.Email == um.Email);
             
